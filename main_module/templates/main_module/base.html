@@ -1,0 +1,487 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    {% if user.is_superuser %}
+        {% block title %}<title>The Habit Cycle (Admin)</title>{% endblock %}
+    {% else %}
+        <title>The Habit Cycle</title>
+    {% endif %}
+
+    <style type="text/css">
+        .sidenav {
+            height: 100%;
+            width: 160px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: black;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .topnav {
+            background-color: white;
+            overflow: hidden;
+            padding-left: 160px;
+        }
+
+        .topnav a {
+            float: left;
+            color: black;
+            text-align: center;
+            padding: 10px 16px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: black;
+        }
+
+        hr.style-three {
+            height: 30px;
+            border-style: solid;
+            border-color: #2196F3;
+            border-width: 1px 0 0 0;
+            border-radius: 20px;
+        }
+
+        hr.style-three:before {
+            display: block;
+            content: "";
+            height: 30px;
+            margin-top: -31px;
+            border-style: solid;
+            border-color: #2196F3;
+            border-width: 0 0 1px 0;
+            border-radius: 20px;
+        }
+
+        .box {
+            display: flex;
+            align-items: center;
+            margin-left: 350px;
+        }
+
+        .wrapper {
+            text-align: center
+        }
+
+        .main {
+            margin-left: 160px;
+            padding: 0 0;
+        }
+
+        .fullscreen_bg {
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-size: cover;
+            background-position: 50% 50%;
+            background-image: url('https://www.insurancejournal.com/app/uploads/2014/09/cyber.jpg');
+            background-repeat: repeat;
+        }
+
+        h1 {
+            font-weight: 100;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        p {
+            font-weight: 100;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        a {
+            color: white;
+        }
+
+        .row {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            clear: both;
+            overflow: hidden;
+        }
+
+        .half {
+            width: 50%;
+            float: left;
+        }
+
+        .content {
+            background: #fff;
+        }
+
+        .tagline {
+            margin-top: -10px;
+            text-align: center;
+            padding: 5px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        .inputContainer {
+            height: 60px;
+            border-top: 1px solid #e5e5e5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inputContainer.last {
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 20px;
+        }
+
+        .inputContainer.half.last.right {
+            border-left: 1px solid #efefef;
+        }
+
+        input[type="date"], input[type="text"], select {
+            height: 100%;
+            width: 100%;
+            padding: 0 20px;
+            position: absolute;
+            top: 0;
+            vertical-align: middle;
+            display: inline-block;
+            border: none;
+            font-size: 13px;
+            color: #777;
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            -webkit-transition: background 0.3s;
+            transition: background 0.3s;
+        }
+
+        input[type="date"] {
+            cursor: pointer;
+        }
+
+        input[type="date"]:focus, input[type="text"]:focus, select:focus {
+            outline: none;
+            background: #ecf0f1;
+        }
+
+        ::-webkit-input-placeholder {
+            color: lightgrey;
+            font-weight: normal;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+
+        ::-moz-placeholder {
+            color: lightgrey;
+            font-weight: normal;
+            transition: all 0.3s;
+        }
+
+        ::-ms-input-placeholder {
+            color: lightgrey;
+            font-weight: normal;
+            transition: all 0.3s;
+        }
+
+        input:-moz-placeholder {
+            color: lightgrey;
+            font-weight: normal;
+            transition: all 0.3s;
+        }
+
+        input:focus::-webkit-input-placeholder {
+            color: #95a5a6;
+            font-weight: bold;
+        }
+
+        .inputContainer label {
+            padding: 5px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #777;
+            display: block;
+            position: absolute;
+        }
+
+        button {
+            font-family: 'Open Sans', sans-serif;
+            background: transparent;
+            border-radius: 2px;
+            border: none;
+            outline: none;
+            height: 50px;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+            position: relative;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            padding-left: 30px;
+            padding-right: 15px;
+        }
+
+        .icon {
+            position: absolute;
+            top: 30%;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        .taskAdd {
+            background: #444;
+            padding-left: 31px;
+        }
+
+        .taskAdd:hover {
+            background: #303030;
+        }
+
+        .taskDelete {
+            background: #e74c3c;
+            padding-left: 30px;
+        }
+
+        .taskDelete:hover {
+            background: #c0392b;
+        }
+
+        .taskList {
+            list-style: none;
+            padding: 0 20px;
+        }
+
+        .taskItem {
+            border-top: 1px solid #e5e5e5;
+            padding: 15px 0;
+            color: #777;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .taskList .taskItem:nth-child(even) {
+            background: #fcfcfc;
+        }
+
+        .taskCheckbox {
+            margin-right: 1em;
+        }
+
+        .complete-true {
+            text-decoration: line-through;
+            color: #bebebe;
+        }
+
+        .taskList .taskDate {
+            color: #95a5a6;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: block;
+            margin-left: 41px;
+        }
+
+        .fa-calendar {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        [class*='category-'] {
+            display: inline-block;
+            font-size: 10px;
+            background: #444;
+            vertical-align: middle;
+            color: #fff;
+            padding: 10px;
+            width: 75px;
+            text-align: center;
+            border-radius: 2px;
+            float: right;
+            font-weight: normal;
+            text-transform: uppercase;
+            margin-right: 20px;
+        }
+
+        .category- {
+            background: transparent;
+        }
+
+        .category-Personal {
+            background: #2980b9;
+        }
+
+        .category-Work {
+            background: #8e44ad;
+        }
+
+        .category-School {
+            background: #f39c12;
+        }
+
+        .category-Cleaning {
+            background: #16a085;
+        }
+
+        .category-Other {
+            background: #d35400;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        footer a {
+            color: #f39c12;
+        }
+
+        .taskCheckbox {
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            width: 19px;
+            height: 19px;
+            vertical-align: middle;
+        }
+
+        .taskCheckbox:focus {
+            outline: none;
+        }
+
+        .taskCheckbox:before, .taskCheckbox:checked:before {
+            font-family: 'FontAwesome';
+            color: #444;
+            font-size: 20px;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+
+        .taskCheckbox:before {
+            content: '\f096';
+        }
+
+        .taskCheckbox:checked:before {
+            content: '\f14a';
+            color: #16a085;
+        }
+
+        .taskCategory {
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            padding-left: 16.5px;
+            background: #fff;
+        }
+
+        .selectArrow {
+            position: absolute;
+            z-index: 10;
+            top: 35%;
+            right: 0;
+            margin-right: 20px;
+            color: #777;
+            pointer-events: none;
+        }
+
+        .taskCategory option {
+            background: #fff;
+            border: none;
+            outline: none;
+            padding: 0 100px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="fullscreen_bg" class="fullscreen_bg"></div>
+
+{% block sidebar %}
+    <div class="sidenav">
+        <a href="/">Home</a>
+        <a href="/create">Create List</a>
+        {% if user.is_superuser %}
+            <a href="/">Users</a>
+        {% else %}
+            <a href="/invite">Invite Manager</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+<div class="topnav">
+    <a style="pointer-events: none; font-size: 17px">
+        <span>The Habit Cycle</span>
+    </a>
+    <a style="float: right" href="{% url 'logout' %}">Logout</a>
+    {% if user.is_superuser %}
+        <a href="{% url "admin:index" %}" style="float: right">Admin Page</a>
+    {% endif %}
+    <a style="float: right; pointer-events: none; color: darkblue" href="#">{{ user.username }}</a>
+</div>
+<br>
+
+<div id="content" class="main">
+    <div class="row justify-content-center col justify-content-center">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+{% extends 'main_module/base.html' %}
+
+{% block content %}
+    <head>
+        <meta name="robots" content="noindex">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel="shortcut icon" type="image/x-icon"
+              href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico"/>
+        <link rel="mask-icon" type=""
+              href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+              color="#111"/>
+        <link rel="canonical" href="https://codepen.io/Gerlach360/pen/wrRMrW"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+
+        <style class="cp-pen-styles">@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400');
+
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            height: auto;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -webkit-animation-fill-mode: none !important;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        #kaban {
+            float: left;
+            position: relative;
+            width: auto;
+            ax-width: auto;
+            height: auto;
+        }
+
+        #scroller {
+            float: left;
+            position: relative;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            overflow: auto;
+        }
+
+        #boards {
+            float: left;
+            position: relative;
+            width: auto;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        .board {
+            float: left;
+            position: relative;
+            width: 300px;
+            height: auto;
+            margin: 8px;
+            background-color: lightgray;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+        }
+
+        .board header {
+            float: left;
+            width: 100%;
+            padding: .5em;
+            background-color: lightgray;
+            text-transform: uppercase;
+            border-radius: 3px 3px 0 0;
+        }
+
+        #board1 header {
+            background-color: #BC3425;
+            color: white
+        }
+
+        #board2 header {
+            background-color: #92549E;
+            color: white
+        }
+
+        #board3 header {
+            background-color: #00B1CF;
+            color: white
+        }
+
+        #board4 header {
+            background-color: #cfca0a;
+            color: white
+        }
+
+        .cards {
+            list-style-type: none;
+            float: left;
+            width: 100%;
+            padding: 4px 8px;
+        }
+
+        .card {
+            float: left;
+            width: 100%;
+            height: auto;
+            background-color: white;
+            padding: 10px;
+            margin: 4px 0;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, .2);;
+            cursor: grab;
+        }
+
+        .cardtitle {
+            float: left;
+            width: 100%;
+        }
+
+        .cards .is-moving {
+            background-color: white;
+            color: black
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .gu-mirror {;
+            cursor: grabbing;
+            position: fixed !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+            opacity: 1;
+            -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+        }
+
+        .gu-hide {
+            display: none !important;
+        }
+
+        .gu-unselectable {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+
+        .gu-transit {
+            opacity: 0.4;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+            filter: alpha(opacity=20);
+        }</style>
+    </head>
+
+    <body>
+    <div id="kaban">
+        <div id="scroller">
+            <div id="boards">
+                <div class="board" id="board1">
+                    <header>On hold</header>
+                    <div class="cards" id="b1">
+                        {% for tiles in on_hold %}
+                            <div class="card"><span class="cardtitle noselect">{{ tiles.content }}</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="board" id="board2">
+                    <header>In Progress</header>
+                    <div class="cards" id="b2">
+                        {% for tiles in in_progress %}
+                            <div class="card"><span class="cardtitle noselect">{{ tiles.content }}</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="board" id="board3">
+                    <header>Done</header>
+                    <div class="cards" id="b3">
+                        {% for tiles in done %}
+                            <div class="card"><span class="cardtitle noselect">{{ tiles.content }}</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="board" id="board4">
+                    <header>Archived</header>
+                    <div class="cards" id="b4">
+                        {% for tiles in archived %}
+                            <div class="card"><span class="cardtitle noselect">{{ tiles.content }}</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+    <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/45226/dragula.min.js'></script>
+
+    <script>
+        dragula([
+            document.getElementById('b1'),
+            document.getElementById('b2'),
+            document.getElementById('b3'),
+            document.getElementById('b4')
+        ]);
+
+        var element = document.getElementById("boards");
+        var numberOfBoards = element.getElementsByClassName('board').length;
+        var boardsWidth = numberOfBoards * 316;
+        console.log(boardsWidth);
+        element.style.width = boardsWidth + "px";
+
+        function disableselect(e) {
+            return false;
+        }
+
+        document.onselectstart = new Function();
+        document.onmousedown = disableselect
+    </script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script>
+    <script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script>
+    <script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script>
+
+    </body>
+    </html>
+{% endblock %}

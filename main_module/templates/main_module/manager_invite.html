@@ -1,0 +1,25 @@
+{% extends 'main_module/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <main class="login-form">
+        <div class="cotainer">
+            <div class="row justify-content-center;col justify-content-center">
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-header">Invite a Manager</div>
+                        <div class="card-body">
+                            <form method="post" class="from-group">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <p style="color: black">Manager Invitation will be sent from this dialog</p>
+                                <button type="submit" class="btn btn-success">Invite</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
